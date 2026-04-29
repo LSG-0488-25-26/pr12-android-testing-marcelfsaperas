@@ -117,7 +117,7 @@ fun MainView(myViewModel: MainViewModel, modifier: Modifier = Modifier) {
                         checked = esCarnivor,
                         onCheckedChange = { myViewModel.toggleEsCarnivor() },
                         modifier = Modifier.fillMaxWidth(0.20f),
-                        enabled = false,
+                        enabled = true,
                         colors = CheckboxDefaults.colors(
                             uncheckedColor = Color.LightGray,
                             checkmarkColor = Color.Black
@@ -125,7 +125,7 @@ fun MainView(myViewModel: MainViewModel, modifier: Modifier = Modifier) {
                     )
                     Checkbox(
                         checked = esVegetaria,
-                        onCheckedChange = { TODO() },
+                        onCheckedChange = { myViewModel.toggleEsVegetaria() },
                         modifier = Modifier.fillMaxWidth(0.33f),
                         enabled = true,
                         colors = CheckboxDefaults.colors(
@@ -135,7 +135,7 @@ fun MainView(myViewModel: MainViewModel, modifier: Modifier = Modifier) {
                     )
                     Checkbox(
                         checked = esVega,
-                        onCheckedChange = { TODO() },
+                        onCheckedChange = { myViewModel.toggleEsVega() },
                         modifier = Modifier.fillMaxWidth(0.33f),
                         enabled = true,
                         colors = CheckboxDefaults.colors(
@@ -163,11 +163,19 @@ fun MainView(myViewModel: MainViewModel, modifier: Modifier = Modifier) {
                 Text("Pilota d'Or:", fontSize = 20.sp)
 
                 listOf("Vinicius", "Lamine Yamal", "Raphina").forEach { player ->
-                    Row(verticalAlignment = Alignment.CenterVertically) {
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .clickable(enabled = player != "Vinicius") {
+                                myViewModel.setSelectedOption(player)
+                            }
+                            .padding(vertical = 4.dp)
+                    ) {
                         RadioButton(
                             selected = selectedOption == player,
-                            onClick = { /* myViewModel.setSelectedOption(player) */ },
-                            enabled = player != "Vinicius", // Deshabilitat
+                            onClick = null,
+                            enabled = player != "Vinicius",
                             colors = RadioButtonDefaults.colors(
                                 selectedColor = Color.Black,
                                 unselectedColor = Color.LightGray
@@ -181,26 +189,26 @@ fun MainView(myViewModel: MainViewModel, modifier: Modifier = Modifier) {
             Text("Volum: ${sliderValue.toInt()}%")
             Slider(
                 value = sliderValue,
-                onValueChange = { /* myViewModel.setSliderValue(it) */ },
+                onValueChange = { myViewModel.setSliderValue(it) },
                 valueRange = 0f..100f
             )
 
             Box(modifier = Modifier.wrapContentSize()) {
                 Text(
                     text = selectedItem,
-                    modifier = Modifier.clickable { /* myViewModel.setExpanded(true) */ }
+                    modifier = Modifier.clickable { myViewModel.setExpanded(true)  }
                 )
                 DropdownMenu(
                     expanded = expanded,
-                    onDismissRequest = { /* myViewModel.setExpanded(false) */ }
+                    onDismissRequest = { myViewModel.setExpanded(false) }
                 ) {
                     listOf("Opció A", "Opció B", "Opció C").forEach { option ->
                         DropdownMenuItem(
                             text = { Text(option) },
-                            onClick = {/*
+                            onClick = {
                                 myViewModel.setSelectedItem(option)
                                 myViewModel.setExpanded(false)
-                            */}
+                            }
                         )
                     }
                 }
@@ -208,11 +216,11 @@ fun MainView(myViewModel: MainViewModel, modifier: Modifier = Modifier) {
 
             OutlinedTextField(
                 value = searchText,
-                onValueChange = { /* myViewModel.setSearchText(it) */ },
-                label = Text("Buscar..."),
+                onValueChange = { myViewModel.setSearchText(it) },
+                label = {Text("Buscar...")},
                 modifier = Modifier
             )
-            Button(onClick = { /* myViewModel.performSearch() */ }) {
+            Button(onClick = { myViewModel.performSearch() }) {
                 Text("Buscar")
             }
 
@@ -224,7 +232,7 @@ fun MainView(myViewModel: MainViewModel, modifier: Modifier = Modifier) {
             }
 
             Button(
-                onClick = { /* myViewModel.toggle() */ },
+                onClick = { myViewModel.toggle() },
                 colors = ButtonDefaults.buttonColors(
                     containerColor = if (toggleState) Color.Green else Color.Red
                 )
