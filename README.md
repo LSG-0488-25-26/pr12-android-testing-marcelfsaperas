@@ -26,3 +26,6 @@ Tests implementats:
 
 ## Notes de desenvolupament
 He corregit un error del test als RadioButtons millorant la semàntica dels components en fer tota la Row clicable.
+
+## Link Video
+https://youtu.be/rUmx8nn0_E0
